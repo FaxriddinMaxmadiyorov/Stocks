@@ -1,10 +1,77 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+:root {
+  --bg: #f7f8fa; --panel: #ffffff; --text: #111418; --muted: #6b7380; --border: #e3e6eb;
+  --accent: #2962ff; --up: #089981; --down: #f23645; --grid: #eef0f3; --hover: #f1f3f6;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1115; --panel: #171a20; --text: #e8eaed; --muted: #8b93a1; --border: #272b33;
+    --accent: #4d7cff; --up: #22ab94; --down: #f7525f; --grid: #1f232a; --hover: #20242c;
+  }
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text);
+  font: 15px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+.app { max-width: 1100px; margin: 0 auto; padding: 20px 20px 32px; }
+h1 { font-size: 20px; margin: 0 0 14px; }
+
+.search { position: relative; margin-bottom: 14px; }
+.search-input { width: 100%; padding: 12px 14px; font-size: 16px; color: var(--text);
+  background: var(--panel); border: 1px solid var(--border); border-radius: 10px; outline: none; }
+.search-input:focus { border-color: var(--accent); }
+.suggestions { position: absolute; z-index: 10; left: 0; right: 0; top: calc(100% + 4px); margin: 0; padding: 4px;
+  list-style: none; background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12); max-height: 320px; overflow-y: auto; }
+.suggestions li { display: flex; gap: 10px; align-items: baseline; padding: 10px; border-radius: 8px; cursor: pointer; }
+.suggestions li[aria-selected="true"], .suggestions li:hover { background: var(--hover); }
+.suggestions .sym { font-weight: 600; min-width: 72px; }
+.suggestions .nm { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.suggestions .ex { color: var(--muted); font-size: 12px; }
+.suggestions .empty { color: var(--muted); cursor: default; }
+
+.card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+.head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.symbol { font-size: 22px; font-weight: 700; }
+.name { color: var(--muted); }
+.quote { text-align: right; }
+.price { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.change { font-variant-numeric: tabular-nums; }
+.change.up { color: var(--up); } .change.down { color: var(--down); }
+
+.toolbar { display: flex; gap: 8px; flex-wrap: wrap; justify-content: space-between; margin-bottom: 10px; }
+.seg { display: inline-flex; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 2px;
+  overflow-x: auto; max-width: 100%; }
+.seg button { border: 0; background: transparent; color: var(--muted); padding: 6px 10px; border-radius: 6px;
+  font: inherit; font-size: 13px; cursor: pointer; white-space: nowrap; min-height: 32px; }
+.seg button.on { background: var(--panel); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+
+.chart-wrap { position: relative; height: clamp(320px, 58vh, 560px); touch-action: pan-y; }
+.chart { position: absolute; inset: 0; }
+.legend { position: absolute; z-index: 3; top: 6px; left: 8px; font-size: 12px; pointer-events: none;
+  font-variant-numeric: tabular-nums; color: var(--muted); display: flex; gap: 10px; flex-wrap: wrap; }
+.legend b { color: var(--text); font-weight: 500; }
+.overlay { position: absolute; inset: 0; z-index: 4; display: flex; align-items: center; justify-content: center;
+  text-align: center; padding: 16px; color: var(--muted); background: color-mix(in srgb, var(--panel) 70%, transparent); }
+.overlay[hidden] { display: none; }
+.overlay.error { color: var(--down); }
+.spinner { width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--accent);
+  border-radius: 50%; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0 0; }
+.stats div { background: var(--bg); border-radius: 8px; padding: 8px 10px; }
+.stats dt { color: var(--muted); font-size: 12px; }
+.stats dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; }
+.foot { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin: 10px 0 0;
+  color: var(--muted); font-size: 12px; }
+
+@media (max-width: 600px) {
+  .app { padding: 12px 12px 24px; }
+  .card { padding: 12px; }
+  .quote { text-align: left; }
+  .toolbar { flex-direction: column; }
+  .seg { width: 100%; }
+  .seg button { flex: 1; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+}

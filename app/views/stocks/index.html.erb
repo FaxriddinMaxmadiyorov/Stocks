@@ -1,0 +1,64 @@
+<% content_for :title, "Stock Chart" %>
+
+<main class="app"
+      data-controller="stock"
+      data-stock-chart-url-value="<%= stocks_chart_path %>"
+      data-action="autocomplete:select->stock#select">
+
+  <h1>Stock Chart</h1>
+
+  <div class="search"
+       data-controller="autocomplete"
+       data-autocomplete-url-value="<%= stocks_search_path %>">
+    <input type="search" class="search-input"
+           placeholder="Search a company or ticker, e.g. Apple or TSLA"
+           autocomplete="off" autocapitalize="characters" spellcheck="false"
+           role="combobox" aria-expanded="false" aria-controls="suggestions" aria-autocomplete="list"
+           data-autocomplete-target="input"
+           data-action="input->autocomplete#search focus->autocomplete#search keydown->autocomplete#navigate blur->autocomplete#close">
+    <ul id="suggestions" class="suggestions" role="listbox" hidden data-autocomplete-target="list"></ul>
+  </div>
+
+  <section class="card">
+    <header class="head">
+      <div>
+        <div class="symbol" data-stock-target="symbol">—</div>
+        <div class="name" data-stock-target="name">&nbsp;</div>
+      </div>
+      <div class="quote">
+        <div class="price" data-stock-target="price">—</div>
+        <div class="change" data-stock-target="change">&nbsp;</div>
+      </div>
+    </header>
+
+    <div class="toolbar">
+      <div class="seg" role="group" aria-label="Date range">
+        <% { "1d" => "1D", "5d" => "5D", "1w" => "1W", "1m" => "1M", "6m" => "6M", "1y" => "1Y", "5y" => "5Y" }.each do |key, label| %>
+          <button type="button" data-stock-target="rangeButton" data-range="<%= key %>" data-action="stock#setRange"><%= label %></button>
+        <% end %>
+      </div>
+      <div class="seg" role="group" aria-label="Chart type">
+        <% { "candles" => "Candles", "line" => "Line", "area" => "Area" }.each do |key, label| %>
+          <button type="button" data-stock-target="typeButton" data-type="<%= key %>" data-action="stock#setType"><%= label %></button>
+        <% end %>
+      </div>
+      <div class="seg">
+        <button type="button" data-stock-target="volumeButton" data-action="stock#toggleVolume" title="Show or hide volume">Volume</button>
+        <button type="button" data-action="stock#resetZoom" title="Fit the whole range">Reset</button>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart" data-stock-target="chart"></div>
+      <div class="legend" data-stock-target="legend"></div>
+      <div class="overlay" data-stock-target="overlay" hidden></div>
+    </div>
+
+    <dl class="stats" data-stock-target="stats"></dl>
+
+    <p class="foot">
+      <span>Drag to pan, scroll or pinch to zoom, hover or tap for values.</span>
+      <span data-stock-target="updated"></span>
+    </p>
+  </section>
+</main>
